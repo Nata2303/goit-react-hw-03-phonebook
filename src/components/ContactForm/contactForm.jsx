@@ -7,39 +7,36 @@ import style from './contactForm.module.css'
 const ContactForm = ({ onAddContact }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const [userDataList, setUserDataList] = useState([]);
 
   useEffect(() => {
-    const storedName = localStorage.getItem('name');
-    const storedNumber = localStorage.getItem('number');
-    if (storedName && storedNumber) {
-      setName(storedName);
-      setNumber(storedNumber);
+    const storedUserDataList = localStorage.getItem('userDataList');
+    if (storedUserDataList) {
+      setUserDataList(JSON.parse(storedUserDataList));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('name', name);
-    localStorage.setItem('number', number);
-  }, [name, number]);
-  
+    localStorage.setItem('userDataList', JSON.stringify(userDataList));
+  }, [userDataList]);
 
-
-  const handleNameChange = event => {
+  const handleNameChange = (event) => {
     setName(event.target.value);
   };
 
-  const handleNumberChange = event => {
+  const handleNumberChange = (event) => {
     setNumber(event.target.value);
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
-    // const contact = {
-    //   id: uuidv4(),
-    //   name,
-    //   number,
-    // };
+   const newUserData = {
+     name: name,
+     number: number,
+   };
+
+   setUserDataList(prevUserDataList => [...prevUserDataList, newUserData]);
 
     onAddContact(name, number);
 
@@ -54,8 +51,6 @@ const ContactForm = ({ onAddContact }) => {
         <input
           type="text"
           name="name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           value={name}
           onChange={handleNameChange}
           required
@@ -67,8 +62,6 @@ const ContactForm = ({ onAddContact }) => {
         <input
           type="text"
           name="number"
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           value={number}
           onChange={handleNumberChange}
           required
@@ -82,4 +75,4 @@ const ContactForm = ({ onAddContact }) => {
   );
 };
 
-export default ContactForm;
+export default ContactForm
