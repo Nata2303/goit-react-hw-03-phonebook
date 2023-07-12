@@ -21,6 +21,7 @@ const ContactForm = ({ onAddContact }) => {
     localStorage.setItem('name', name);
     localStorage.setItem('number', number);
   }, [name, number]);
+  
 
 
   const handleNameChange = event => {
